@@ -16,6 +16,7 @@ private:
     ScreenManager *screenManager = nullptr;
     SDL_Color text_color;
     SDL_Surface *text_surface = nullptr;
+
 public:
     UI_Manager(ScreenManager *screenMgr) {
         screenManager = screenMgr;
@@ -34,10 +35,12 @@ public:
      * @param y - Vertical position of text (in pixels)
      * @param text - Text that you want to add to the screen
      **/
-    void drawText(int x, int y, const string &text) {
-        text_color.r = 255;
-        text_color.g = 255;
-        text_color.b = 255;
+    void drawText(int x, int y, const string &text, int textColor) {
+        text_color.r = (textColor & 0x00ff0000) / 0x10000;
+        text_color.g = (textColor & 0x0000ff00) / 0x100;
+        text_color.b = textColor & 0x000000ff;
+        // text_color.g=textColor%10-textColor%1000;
+        //text_color.b=textColor%1000;
         text_surface = TTF_RenderUTF8_Solid(fnt, text.c_str(), text_color);
 
         SDL_Rect textBg;
@@ -56,11 +59,13 @@ public:
      * @param width - width of a button
      * @param height - height if a button
      * @param text - Text that you want to add to the screen
+     * @param textColor - Color of the text that will be added to the button
      **/
-    void createButton(int x, int y, int width, int height, const string &text, int color) {
-        Draw_FillRect(screenManager->getMainSurface(), static_cast<Sint16>(x), static_cast<Sint16>(y),
-                      static_cast<Uint16>(width), static_cast<Uint16>(height), color);
-        drawText((x + width / 2) - 10 * (text.length() / 2.0), y + height / 2 - 10, text);
+    void createButton(int x, int y, int width, int height, const string &text, int btnColor, int textColor) {
+
+        screenManager->draw_Rect(x, y, width, height, btnColor);
+
+        drawText((x + width / 2) - 10 * (text.length() / 2.0), y + height / 2 - 10, text, textColor);
     }
 
 };

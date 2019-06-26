@@ -15,12 +15,28 @@ using namespace std;
 
 class Ship : GameObject {
 protected:
-    int health{0}, movementDirrection{0}, movementSpeed{0};
+    int health{0}, movementDirection{0}, movementSpeed{0};
 
     ScreenManager *screenManager = nullptr;
-    list<SDL_Rect> shipParts;
-    // list<int> hitLocX;
     coords location;
+    SDL_Rect body;
+    int bodyColor = 0x727272;
+
+    void updateLocation() {
+        location.x1 += movementDirection * movementSpeed;
+
+
+        //TODO: make relative
+
+        // ==== Location checks (so that player won't go off screen) ==== //
+        if ((location.x1 >= 1190) && movementDirection == 1)
+            location.x1 -= 1150;
+
+        if ((location.x1 < 0) && movementDirection == -1)
+            location.x1 += 1200;
+
+        location.x2 = location.x1 + body.w;
+    }
 
 public:
     coords getCoords() {

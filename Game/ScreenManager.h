@@ -9,6 +9,7 @@
 #include <exception>
 #include <stdexcept>
 #include <iostream>
+#include <SDL/SDL_draw.h>
 
 using namespace std;
 
@@ -49,6 +50,18 @@ public:
 
     Sint16 getScreenHeight() {
         return max_y;
+    }
+
+    /**
+     * @brief Draws a rectangle
+     * @param x - Horizontal location of upper left conner of the rect ,that you want to draw
+     * @param y - Vertical Location of upper left conner of the rect ,that you want to draw
+     * @param width - width of the rect you want to draw
+     * @param height - height of the rect you want to draw
+     * */
+    void draw_Rect(int x, int y, int width, int height, int color) {
+        Draw_FillRect(mainSurface, static_cast<Sint16>(x), static_cast<Sint16>(y),
+                      static_cast<Uint16>(width), static_cast<Uint16>(height), color);
     }
 };
 
