@@ -13,7 +13,7 @@
 
 using namespace std;
 
-class Ship : GameObject {
+class Ship : public GameObject {
 protected:
     int health{0}, movementDirection{0}, movementSpeed{0};
 

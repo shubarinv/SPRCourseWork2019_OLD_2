@@ -7,6 +7,7 @@
 #include "Game/EventManager.h"
 #include "Game/Player.h"
 #include "Game/Enemy.h"
+#include "Game/GameManager.h"
 
 /**
  * @brief Draws background(sky, water)
@@ -60,7 +61,10 @@ int main() {
     EventManager eventManager;
     SDL_Event event;
     Player player(&screenManager);
-    Enemy enemy(&screenManager);
+    list<Enemy> enemyShips;
+    GameManager gmManager(&screenManager, &enemyShips);
+    gmManager.setWave(1);
+
 
     // ===== Show mainMenu ===== //
 
@@ -91,8 +95,14 @@ int main() {
                 player.setMovementSpeed(1);
         }
         player.reDraw();
-        enemy.reDraw();
+
+        ///@brief reDraws all enemy ships
+        for (auto &enemyShip : enemyShips) {
+            enemyShip.reDraw();
+        }
+
         screenManager.updateScreen();
+
 
     }
     return 0;

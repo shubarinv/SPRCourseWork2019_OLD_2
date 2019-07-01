@@ -9,16 +9,29 @@
 #include "Ship.h"
 
 class Enemy : Ship {
+private:
+    bool initialised;
 public:
-    explicit Enemy(ScreenManager *screenMgr) {
-        screenManager = screenMgr;
+
+    Enemy(ScreenManager *screenMgr) {
+        init(screenMgr);
+        initialised = true;
+    }
+
+    Enemy() {
+        initialised = false;
+    };
+
+    void init(ScreenManager *screenMgr) {
+        cout << "Enemy was spawned: " << this << endl;
         health = 100;
+        screenManager = screenMgr;
         movementDirection = 1;
         movementSpeed = 1;
         {
             body.w = 80;
             body.h = 30;
-            body.x = 100;
+            body.x = randIntInRange(0, screenManager->getScreenWidth());
             body.y = 70;
             SDL_FillRect(screenMgr->getMainSurface(), &body, bodyColor);
         }
@@ -26,13 +39,18 @@ public:
         location.x2 = body.x + body.w;
         location.y1 = body.y;
         location.y1 = body.y + body.h;
+
+        initialised = true;
     }
 
-
     void reDraw() {
+        if (!initialised)throw runtime_error("Error: tried to call reDraw for uninitialised Enemy ship!");
         updateLocation();
+
+        //cout<< "Enemy("<<this<<") new location: "<<location.x1<<endl;
         body.x = location.x1;
         SDL_FillRect(screenManager->getMainSurface(), &body, bodyColor);
+
         /**
          * @bug code bellow will somewhy throw SEGFAULT
          * */
@@ -42,6 +60,7 @@ public:
             // Draw_Line(screenManager->getMainSurface(), location.x2, location.y2, location.x2+1, location.y1, 0xff);
         }
     }
+
 };
 
 
