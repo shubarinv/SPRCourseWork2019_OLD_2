@@ -62,10 +62,17 @@ public:
      * @param textColor - Color of the text that will be added to the button
      **/
     void createButton(int x, int y, int width, int height, const string &text, int btnColor, int textColor) {
-
         screenManager->draw_Rect(x, y, width, height, btnColor);
-
         drawText((x + width / 2) - 10 * (text.length() / 2.0), y + height / 2 - 10, text, textColor);
+    }
+
+
+    /**
+     * @brief Draws HUD(text like player money, level, etc)
+    **/
+    void drawHUD(int health, int money) {
+        drawText(10, 10, "Health:" + to_string(health), 0x0);
+        drawText(screenManager->getScreenWidth() - 100, 10, "Money:" + to_string(money), 0x0);
     }
 
 };

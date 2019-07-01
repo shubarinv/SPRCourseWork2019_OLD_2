@@ -7,10 +7,10 @@
 
 #include "Ship.h"
 
-class Player : Ship {
+class Player : public Ship {
 private:
     int money{0};
-    SDL_Rect body;
+    SDL_Rect body{};
     int bodyColor = 0x727272;
     /**
      * @brief Update ship location according to speed and movement direction

@@ -25,15 +25,12 @@ protected:
     void updateLocation() {
         location.x1 += movementDirection * movementSpeed;
 
-
-        //TODO: make relative
-
         // ==== Location checks (so that player won't go off screen) ==== //
-        if ((location.x1 >= 1190) && movementDirection == 1)
-            location.x1 -= 1150;
+        if ((location.x1 >= screenManager->getScreenWidth() - 90) && movementDirection == 1)
+            location.x1 -= screenManager->getScreenWidth() - 120;
 
         if ((location.x1 < 0) && movementDirection == -1)
-            location.x1 += 1200;
+            location.x1 += screenManager->getScreenWidth() - 90;
 
         location.x2 = location.x1 + body.w;
     }
@@ -46,6 +43,19 @@ public:
     void setHealth(int deltaHealth) {
         health += deltaHealth;
     }
+
+    int getHealth() {
+        return health;
+    }
+
+    int getMovementSpeed() const {
+        return movementSpeed;
+    }
+
+    void setMovementSpeed(int mvSpeed) {
+        Ship::movementSpeed = mvSpeed;
+    }
+
 };
 
 

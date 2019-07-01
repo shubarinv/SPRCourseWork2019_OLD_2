@@ -16,13 +16,6 @@ void drawBg(ScreenManager *screenMgr) {
     screenMgr->draw_Rect(0, 100, screenMgr->getScreenWidth(), screenMgr->getScreenHeight(), 0x006994);
 }
 
-/**
- * @brief Draws HUD(text like player money, level, etc)
- **/
-void drawHUD(UI_Manager *uiMgr, int playerMoney) {
-    uiMgr->drawText(10, 10, "Money:" + to_string(playerMoney), 0x0);
-}
-
 int showMainMenu(EventManager *eventMgr, ScreenManager *screenMgr, UI_Manager *UI_Mgr) {
     screenMgr->draw_Rect(0, 0, screenMgr->getScreenWidth(), screenMgr->getScreenHeight(), 0xffffff);
     UI_Mgr->createButton(screenMgr->getScreenWidth() / 2 - 120, 180, 250, 60, "Start new game", 0xb791d8, 0x0);
@@ -71,13 +64,13 @@ int main() {
 
     // ===== Show mainMenu ===== //
 
-    //if(showMainMenu(&eventManager, &screenManager, &uiManager)==-1)return 0;
+    // if (showMainMenu(&eventManager, &screenManager, &uiManager) == -1) return 0;
 
     // ===== Game itself ====== //
     while (true) {
 
         drawBg(&screenManager);
-        drawHUD(&uiManager, player.getMoney());
+        uiManager.drawHUD(player.getHealth(), player.getMoney());
 
         event = eventManager.getEvent();
         {
@@ -91,6 +84,11 @@ int main() {
             if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_RIGHT)
                 player.setMovementDirection(1);
 
+            if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_DOWN)
+                player.setMovementSpeed(0);
+
+            if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_UP)
+                player.setMovementSpeed(1);
         }
         player.reDraw();
         enemy.reDraw();
