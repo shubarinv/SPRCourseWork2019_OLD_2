@@ -9,6 +9,7 @@
 #include <SDL/SDL_draw.h>
 #include "GameObject.h"
 #include "ScreenManager.h"
+#include "Weapon.h"
 #include <list>
 
 using namespace std;
@@ -21,6 +22,7 @@ protected:
     coords location;
     SDL_Rect body;
     int bodyColor = 0x727272;
+    Weapon weapon;
 
     void updateLocation() {
         location.x1 += movementDirection * movementSpeed;

@@ -40,13 +40,15 @@ public:
         location.y1 = body.y;
         location.y1 = body.y + body.h;
 
+        weapon.init(screenManager);
+
         initialised = true;
     }
 
     void reDraw() {
         if (!initialised)throw runtime_error("Error: tried to call reDraw for uninitialised Enemy ship!");
+        weapon.shoot();
         updateLocation();
-
         //cout<< "Enemy("<<this<<") new location: "<<location.x1<<endl;
         body.x = location.x1;
         SDL_FillRect(screenManager->getMainSurface(), &body, bodyColor);

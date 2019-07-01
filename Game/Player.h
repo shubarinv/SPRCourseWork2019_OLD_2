@@ -12,9 +12,6 @@ private:
     int money{0};
     SDL_Rect body{};
     int bodyColor = 0x727272;
-    /**
-     * @brief Update ship location according to speed and movement direction
-     **/
 
 public:
     explicit Player(ScreenManager *screenMgr) {
@@ -33,6 +30,9 @@ public:
         location.x2 = body.x + body.w;
         location.y1 = body.y;
         location.y1 = body.y + body.h;
+
+        weapon.init(screenManager);
+
         money = 0;
     }
 
