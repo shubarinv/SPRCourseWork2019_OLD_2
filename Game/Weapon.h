@@ -15,18 +15,20 @@ private:
     bool bIsOnScreen{true};
     ScreenManager *screenManager;
     SDL_Rect particle;
+    bool bIsEnemy{true};
 public:
     Particle() {
         bIsOnScreen = true;
         initialsed = false;
     }
 
-    void init(ScreenManager *screenMgr, coords loc) {
+    void init(ScreenManager *screenMgr, coords loc, bool isEnemy) {
         cout << "Particle was spawned: " << this << endl;
         particle.h = 10;
         particle.w = 5;
         particle.x = (loc.x1 + loc.x2) / 2;
         particle.y = (loc.y1 + loc.y2) / 2;
+        bIsEnemy = isEnemy;
         screenManager = screenMgr;
         initialsed = true;
     }
@@ -41,16 +43,22 @@ public:
 
     void reDraw() {
         if (!initialsed) throw runtime_error("ERROR: attempt to call reDraw on uninitialised Particle instance\n");
+        
         updatelocation();
-        // cout<<"Particle("<<this<<") trying to get screenManager->mainSurface...";
-        SDL_FillRect(screenManager->getMainSurface(), &particle, 0xffff);
-        // cout<<"OK"<<endl;
+
+        if (bIsOnScreen)
+            SDL_FillRect(screenManager->getMainSurface(), &particle, 0xffff);
 
     }
 
 private:
     void updatelocation() {
-
+        if (bIsOnScreen) {
+            if (particle.y >= screenManager->getScreenHeight() || particle.y <= 0)
+                bIsOnScreen = false;
+            if (bIsEnemy) particle.y++;
+            else particle.y--;
+        }
     }
 };
 
@@ -83,7 +91,7 @@ public:
     void shoot() {
         if (!initialsed) throw runtime_error("ERROR: attempt to call shoot on uninitialised Weapon instance\n");
         particles.push_back(*new Particle());
-        particles.back().init(screenManager, location);
+        particles.back().init(screenManager, location, bIsEnemy);
     }
 
     int getAmmo() const {
@@ -99,6 +107,10 @@ public:
         if (!particles.empty())
             for (auto &particle : particles) {
                 particle.reDraw();
+                if (!particle.isOnScreen()) {
+                    cout << "Particle(" << &particle << ") will be removed from list" << " NOT YET IMPLEMENTED" << endl;
+
+                }
             }
     }
 
