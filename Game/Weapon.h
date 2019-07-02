@@ -6,14 +6,29 @@
 #define COURSEWORK_WEAPON_H
 
 
+#include <list>
 #include "GameObject.h"
 #include "Ship.h"
+
+class Particle : public GameObject {
+private:
+    bool bIsOnScreen{true};
+public:
+    bool isOnScreen() const {
+        return bIsOnScreen;
+    }
+
+    void setIsOnScreem(bool OnScreen) {
+        Particle::bIsOnScreen = OnScreen;
+    }
+};
 
 class Weapon : public GameObject {
 private:
     int ammo{40}, power{1};
     bool initialsed{false};
     ScreenManager *screenManager;
+    list <Particle> particles;
 public:
     void init(ScreenManager *screenMgr) {
         initialsed = true;
@@ -45,18 +60,7 @@ public:
 
 };
 
-class Particle : public GameObject {
-private:
-    bool isOnScreem{true};
-public:
-    bool isOnScreem1() const {
-        return isOnScreem;
-    }
 
-    void setIsOnScreem(bool OnScreem) {
-        Particle::isOnScreem = OnScreem;
-    }
-};
 
 
 #endif //COURSEWORK_WEAPON_H
