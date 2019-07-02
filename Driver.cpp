@@ -93,6 +93,8 @@ int main() {
 
             if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_UP)
                 player.setMovementSpeed(1);
+            if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_SPACE)
+                player.shoot();
         }
         player.reDraw();
 

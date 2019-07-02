@@ -10,6 +10,7 @@
 
 class GameObject {
 public:
+    bool initialsed{false};
     struct coords {
         int x1, x2;
         int y1, y2;

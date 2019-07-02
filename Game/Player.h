@@ -29,10 +29,10 @@ public:
         location.x1 = body.x;
         location.x2 = body.x + body.w;
         location.y1 = body.y;
-        location.y1 = body.y + body.h;
+        location.y2 = body.y + body.h;
 
-        weapon.init(screenManager);
-
+        weapon.init(screenManager, false);
+        weapon.location = this->location;
         money = 0;
     }
 
@@ -40,6 +40,7 @@ public:
         updateLocation();
         body.x = location.x1;
         SDL_FillRect(screenManager->getMainSurface(), &body, bodyColor);
+        weapon.update(location);
     }
 
     /**
@@ -51,6 +52,10 @@ public:
 
     int getMoney() {
         return money;
+    }
+
+    void shoot() {
+        weapon.shoot();
     }
 };
 
