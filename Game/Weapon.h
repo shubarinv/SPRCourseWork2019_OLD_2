@@ -44,13 +44,10 @@ public:
     }
 
     void reDraw() {
-        if (!initialsed) throw runtime_error("ERROR: attempt to call reDraw on uninitialised Particle instance\n");
-        
-        updatelocation();
-
-        if (bIsOnScreen)
+        if (initialsed && bIsOnScreen) {
+            updatelocation();
             SDL_FillRect(screenManager->getMainSurface(), &particle, 0xffff);
-
+        }
     }
 
 private:
@@ -107,14 +104,11 @@ public:
 
     void update(coords newloc) {
         location = newloc;
-        if (!particles.empty())
+        if (!particles.empty()) {
             for (auto &particle : particles) {
                 particle.reDraw();
-                if (!particle.isOnScreen()) {
-                    //         cout << "Particle(" << &particle << ") will be removed from list" << " NOT YET IMPLEMENTED" << endl;
-
-                }
             }
+        }
     }
 
     list <Particle> particles;

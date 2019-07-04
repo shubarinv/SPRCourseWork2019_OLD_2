@@ -9,6 +9,20 @@
 #include "Game/Enemy.h"
 #include "Game/GameManager.h"
 
+/*
+ * global vars
+ * */
+// ===== GameManagers initialisation ==== //
+ScreenManager screenManager;
+UI_Manager uiManager(&screenManager);
+EventManager eventManager;
+SDL_Event event;
+Player player(&screenManager);
+list<Enemy> enemyShips;
+GameManager gmManager(&screenManager, &enemyShips);
+
+bool stopThreads = false;
+
 /**
  * @brief Draws background(sky, water)
  **/
@@ -48,27 +62,57 @@ int showMainMenu(EventManager *eventMgr, ScreenManager *screenMgr, UI_Manager *U
             (eventMgr->getMousePosY() < 440) &&
             (event.type == SDL_MOUSEBUTTONDOWN)) {
             cout << "MainMenu: Quit button pressed. Quiting..." << endl;
+            stopThreads = true;
             return -1;
         }
     }
     return 0;
 }
 
+int th_checkHitsPlayer(void *unused) {
+    while (!stopThreads) {
+        for (auto &enemyShip : enemyShips) {
+            for (auto &particle : player.weapon.particles) {
+                if (particle.isOnScreen())
+                    gmManager.checkForHits(&enemyShip, &particle);
+            }
+        }
+    }
+    cout << "Thread (checkHitsPlayer) got stop command... Quiting" << endl;
+}
+
+int th_checkHitsEnemy(void *unused) {
+    while (!stopThreads) {
+        for (auto &enemyShip : enemyShips) {
+            for (auto &particle : enemyShip.weapon.particles) {
+                gmManager.checkForHits(&player, &particle);
+            }
+        }
+    }
+    cout << "Thread (checkHitsEnemy) got stop command... Quiting" << endl;
+}
+
 int main() {
-    // ===== GameManagers initialisation ==== //
-    ScreenManager screenManager;
-    UI_Manager uiManager(&screenManager);
-    EventManager eventManager;
-    SDL_Event event;
-    Player player(&screenManager);
-    list<Enemy> enemyShips;
-    GameManager gmManager(&screenManager, &enemyShips);
+
     gmManager.setWave(1);
 
+    SDL_Thread *checkHitsPlayer_Thread;
+    checkHitsPlayer_Thread = SDL_CreateThread(th_checkHitsPlayer, nullptr);
+    if (checkHitsPlayer_Thread == nullptr) {
+        fprintf(stderr, "Unable to create thread: %s\n", SDL_GetError());
+        throw;
+    }
+
+    SDL_Thread *checkHitsEnemy_Thread;
+    checkHitsEnemy_Thread = SDL_CreateThread(th_checkHitsEnemy, nullptr);
+    if (checkHitsEnemy_Thread == nullptr) {
+        fprintf(stderr, "Unable to create thread: %s\n", SDL_GetError());
+        throw;
+    }
 
     // ===== Show mainMenu ===== //
 
-    // if (showMainMenu(&eventManager, &screenManager, &uiManager) == -1) return 0;
+    if (showMainMenu(&eventManager, &screenManager, &uiManager) == -1) return 0;
 
     // ===== Game itself ====== //
     while (true) {
@@ -80,6 +124,9 @@ int main() {
         {
             if (event.type == SDL_QUIT) {
                 cout << "EventManager: got ESC button press. Quiting..." << endl;
+                stopThreads = true;
+                SDL_WaitThread(checkHitsPlayer_Thread, nullptr);
+                SDL_WaitThread(checkHitsEnemy_Thread, nullptr);
                 break;
             }
             if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_LEFT)
@@ -101,13 +148,6 @@ int main() {
         ///@brief reDraws all enemy ships
         for (auto &enemyShip : enemyShips) {
             enemyShip.reDraw();
-            for (auto &particle : enemyShip.weapon.particles) {
-                gmManager.checkForHits(&player, &particle);
-            }
-            for (auto &particle : player.weapon.particles) {
-                if (particle.isOnScreen())
-                    gmManager.checkForHits(&enemyShip, &particle);
-            }
         }
         screenManager.updateScreen();
 

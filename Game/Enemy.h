@@ -31,7 +31,7 @@ public:
         {
             body.w = 80;
             body.h = 30;
-            body.x = randIntInRange(0, screenManager->getScreenWidth());
+            body.x = randIntInRange(100, screenManager->getScreenWidth());
             body.y = 70;
             SDL_FillRect(screenMgr->getMainSurface(), &body, bodyColor);
         }
