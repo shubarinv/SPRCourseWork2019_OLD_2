@@ -42,6 +42,42 @@ public:
 
     }
 
+    void checkForHits(Player *ship, Particle *particle) {
+        if ((particle->location.x1 + particle->location.x2) / 2 >= ship->getCoords().x1 &&
+            (particle->location.x1 + particle->location.x2) / 2 <= ship->getCoords().x2 &&
+            particle->location.y1 >= ship->getCoords().y1 &&
+            particle->location.y2 <= ship->getCoords().y2) {
+            cout << "Player (" << ship << ") got hit" << endl;
+            cout << "Particle (" << particle << ") Will now be removed" << endl;
+            particle->setIsOnScreem(false);
+        }
+    }
+
+    void checkForHits(Enemy *ship, Particle *particle) {
+        /*  cout<<"____________________________________"<<endl;
+          if((particleLoc.x1 + particleLoc.x2) / 2 >= ship->getCoords().x1)
+              cout<<"By X1- OK"<<endl;
+          if((particleLoc.x1 + particleLoc.x2) / 2 <= ship->getCoords().x2)
+              cout<<"By X2- OK"<<endl;
+          if(particleLoc.y1 >= ship->getCoords().y1)
+              cout<<"By Y1- OK"<<endl;
+          if(particleLoc.y2 <= ship->getCoords().y2)
+              cout<<"By Y2- OK"<<endl;
+          cout<<"X1 "<<particleLoc.x1<<" "<<ship->getCoords().x1<<endl;
+          cout<<"X2 "<<particleLoc.x2<<" "<<ship->getCoords().x2<<endl;
+          cout<<"Y1 "<<particleLoc.y1<<" "<<ship->getCoords().y1<<endl;
+          cout<<"Y2 "<<particleLoc.y2<<" "<<ship->getCoords().y2<<endl;
+          cout<<"____________________________________"<<endl;*/
+        if ((particle->location.x1 + particle->location.x2) / 2 >= ship->getCoords().x1 &&
+            (particle->location.x1 + particle->location.x2) / 2 <= ship->getCoords().x2 &&
+            particle->location.y1 >= ship->getCoords().y1 &&
+            particle->location.y2 <= ship->getCoords().y2) {
+            cout << "Enemy (" << ship << ") got hit" << endl;
+            cout << "Particle (" << particle << ") Will now be removed" << endl;
+            particle->setIsOnScreem(false);
+        }
+    }
+
 };
 
 

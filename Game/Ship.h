@@ -22,7 +22,6 @@ protected:
     coords location;
     SDL_Rect body;
     int bodyColor = 0x727272;
-    Weapon weapon;
 
     void updateLocation() {
         location.x1 += movementDirection * movementSpeed;
@@ -58,6 +57,7 @@ public:
         Ship::movementSpeed = mvSpeed;
     }
 
+    Weapon weapon;
 };
 
 

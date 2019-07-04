@@ -8,7 +8,7 @@
 
 #include "Ship.h"
 
-class Enemy : Ship {
+class Enemy : public Ship {
 private:
     bool initialised;
 public:

@@ -101,8 +101,14 @@ int main() {
         ///@brief reDraws all enemy ships
         for (auto &enemyShip : enemyShips) {
             enemyShip.reDraw();
+            for (auto &particle : enemyShip.weapon.particles) {
+                gmManager.checkForHits(&player, &particle);
+            }
+            for (auto &particle : player.weapon.particles) {
+                if (particle.isOnScreen())
+                    gmManager.checkForHits(&enemyShip, &particle);
+            }
         }
-
         screenManager.updateScreen();
 
 

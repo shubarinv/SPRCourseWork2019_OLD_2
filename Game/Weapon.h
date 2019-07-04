@@ -30,6 +30,8 @@ public:
         particle.y = (loc.y1 + loc.y2) / 2;
         bIsEnemy = isEnemy;
         screenManager = screenMgr;
+        location.x1 = particle.x;
+        location.x2 = particle.x + particle.w;
         initialsed = true;
     }
 
@@ -58,6 +60,8 @@ private:
                 bIsOnScreen = false;
             if (bIsEnemy) particle.y++;
             else particle.y--;
+            location.y1 = particle.y;
+            location.y2 = particle.y + particle.h;
         }
     }
 };
@@ -66,7 +70,6 @@ class Weapon : public GameObject {
 private:
     int ammo{40}, power{1};
     ScreenManager *screenManager;
-    list <Particle> particles;
     bool bIsEnemy{true};
 public:
     void init(ScreenManager *screenMgr, bool isEnemy) {
@@ -108,12 +111,13 @@ public:
             for (auto &particle : particles) {
                 particle.reDraw();
                 if (!particle.isOnScreen()) {
-                    cout << "Particle(" << &particle << ") will be removed from list" << " NOT YET IMPLEMENTED" << endl;
+                    //         cout << "Particle(" << &particle << ") will be removed from list" << " NOT YET IMPLEMENTED" << endl;
 
                 }
             }
     }
 
+    list <Particle> particles;
 };
 
 
