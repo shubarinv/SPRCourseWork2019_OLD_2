@@ -48,18 +48,20 @@ public:
 
     void reDraw() {
         if (!initialised)throw runtime_error("Error: tried to call reDraw for uninitialised Enemy ship!");
-        updateLocation();
-        body.x = location.x1;
-        SDL_FillRect(screenManager->getMainSurface(), &body, bodyColor);
-        weapon.update(location);
+        if (health > 0) {
+            updateLocation();
+            body.x = location.x1;
+            SDL_FillRect(screenManager->getMainSurface(), &body, bodyColor);
+            weapon.update(location);
 
-        /**
-         * @bug code bellow will somewhy throw SEGFAULT
-         * */
-        if (movementDirection == -1) {
-            //  Draw_Line(screenManager->getMainSurface(), location.x1, location.y2, location.x1-30, location.y1, 0x00);
-        } else {
-            // Draw_Line(screenManager->getMainSurface(), location.x2, location.y2, location.x2+1, location.y1, 0xff);
+            /**
+             * @bug code bellow will somewhy throw SEGFAULT
+             * */
+            if (movementDirection == -1) {
+                //  Draw_Line(screenManager->getMainSurface(), location.x1, location.y2, location.x1-30, location.y1, 0x00);
+            } else {
+                // Draw_Line(screenManager->getMainSurface(), location.x2, location.y2, location.x2+1, location.y1, 0xff);
+            }
         }
     }
 
