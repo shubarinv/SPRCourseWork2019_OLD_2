@@ -43,10 +43,15 @@ public:
         Particle::bIsOnScreen = OnScreen;
     }
 
+    bool doOnce = true;
     void reDraw() {
+        if (!initialsed) cout << "WARNING: Particle(" << this << ") is UNINITIALISED, but got reDraw command" << endl;
         if (initialsed && bIsOnScreen) {
             updatelocation();
             SDL_FillRect(screenManager->getMainSurface(), &particle, 0xffff);
+        } else if (doOnce) {
+            cout << "WARNING: Particle(" << this << ") Should have been deleted, but got reDraw command" << endl;
+            doOnce = false;
         }
     }
 
