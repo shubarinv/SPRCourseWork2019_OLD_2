@@ -74,7 +74,7 @@ int th_checkHitsPlayer(void *unused) {
         for (auto &enemyShip : enemyShips) {
             for (auto &particle : player.weapon.particles) {
                 if (particle.isOnScreen())
-                    gmManager.checkForHits(&enemyShip, &particle);
+                    GameManager::checkForHits(&enemyShip, &particle);
             }
         }
     }
@@ -85,7 +85,7 @@ int th_checkHitsEnemy(void *unused) {
     while (!stopThreads) {
         for (auto &enemyShip : enemyShips) {
             for (auto &particle : enemyShip.weapon.particles) {
-                gmManager.checkForHits(&player, &particle);
+                GameManager::checkForHits(&player, &particle);
             }
         }
     }

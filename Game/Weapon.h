@@ -71,7 +71,7 @@ private:
 class Weapon : public GameObject {
 private:
     int ammo{40}, power{1};
-    ScreenManager *screenManager;
+    ScreenManager *screenManager{};
     bool bIsEnemy{true};
 public:
     void init(ScreenManager *screenMgr, bool isEnemy) {

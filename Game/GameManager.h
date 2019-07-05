@@ -42,7 +42,7 @@ public:
 
     }
 
-    void checkForHits(Player *ship, Particle *particle) {
+    static void checkForHits(Player *ship, Particle *particle) {
         if ((particle->location.x1 + particle->location.x2) / 2 >= ship->getCoords().x1 &&
             (particle->location.x1 + particle->location.x2) / 2 <= ship->getCoords().x2 &&
             particle->location.y1 >= ship->getCoords().y1 &&
@@ -54,7 +54,7 @@ public:
         }
     }
 
-    void checkForHits(Enemy *ship, Particle *particle) {
+    static void checkForHits(Enemy *ship, Particle *particle) {
         if ((particle->location.x1 + particle->location.x2) / 2 >= ship->getCoords().x1 &&
             (particle->location.x1 + particle->location.x2) / 2 <= ship->getCoords().x2 &&
             particle->location.y1 >= ship->getCoords().y1 &&

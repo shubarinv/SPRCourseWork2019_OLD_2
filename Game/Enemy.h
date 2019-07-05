@@ -13,11 +13,6 @@ private:
     bool initialised;
 public:
 
-    Enemy(ScreenManager *screenMgr) {
-        init(screenMgr);
-        initialised = true;
-    }
-
     Enemy() {
         initialised = false;
     };
@@ -59,11 +54,11 @@ public:
             /**
              * @bug code bellow will somewhy throw SEGFAULT
              * */
-            if (movementDirection == -1) {
+            /*if (movementDirection == -1) {
                 //  Draw_Line(screenManager->getMainSurface(), location.x1, location.y2, location.x1-30, location.y1, 0x00);
             } else {
                 // Draw_Line(screenManager->getMainSurface(), location.x2, location.y2, location.x2+1, location.y1, 0xff);
-            }
+            }*/
         } else if (doOnce) {
             cout << "WARNING: Enemy(" << this << ") Should have been deleted, but got reDraw command" << endl;
             doOnce = false;
