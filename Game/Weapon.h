@@ -43,15 +43,13 @@ public:
         Particle::bIsOnScreen = OnScreen;
     }
 
-    bool doOnce = true;
     void reDraw() {
-        if (!initialsed) cout << "WARNING: Particle(" << this << ") is UNINITIALISED, but got reDraw command" << endl;
+        if (!initialsed) throw runtime_error("Error: Particle is UNINITIALISED, but got reDraw command");
         if (initialsed && bIsOnScreen) {
             updatelocation();
-            SDL_FillRect(screenManager->getMainSurface(), &particle, 0xffff);
-        } else if (doOnce) {
-            cout << "WARNING: Particle(" << this << ") Should have been deleted, but got reDraw command" << endl;
-            doOnce = false;
+            SDL_FillRect(screenManager->getMainSurface(), &particle, 0xff0000);
+        } else {
+            throw runtime_error("Error: Particle Should have been deleted, but got reDraw command");
         }
     }
 
@@ -68,6 +66,10 @@ private:
     }
 };
 
+
+bool removalCheck(Particle particle) {
+    return !particle.isOnScreen();
+}
 class Weapon : public GameObject {
 private:
     int ammo{40}, power{1};
@@ -110,6 +112,7 @@ public:
     void update(coords newloc) {
         location = newloc;
         if (!particles.empty()) {
+            particles.remove_if(removalCheck);
             for (auto &particle : particles) {
                 particle.reDraw();
             }

@@ -79,6 +79,7 @@ int th_checkHitsPlayer(void *unused) {
         }
     }
     cout << "Thread (checkHitsPlayer) got stop command... Quiting" << endl;
+    return 0;
 }
 
 int th_checkHitsEnemy(void *unused) {
@@ -90,6 +91,11 @@ int th_checkHitsEnemy(void *unused) {
         }
     }
     cout << "Thread (checkHitsEnemy) got stop command... Quiting" << endl;
+    return 0;
+}
+
+bool checkIfEnemyWasKilled(Enemy enemy) {
+    return enemy.getHealth() <= 0;
 }
 
 int main() {
@@ -119,7 +125,7 @@ int main() {
 
         drawBg(&screenManager);
         uiManager.drawHUD(player.getHealth(), player.getMoney());
-
+        enemyShips.remove_if(checkIfEnemyWasKilled);
         event = eventManager.getEvent();
         {
             if (event.type == SDL_QUIT) {

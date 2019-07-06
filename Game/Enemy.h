@@ -40,8 +40,7 @@ public:
 
         initialised = true;
     }
-
-    bool doOnce = true;
+    
 
     void reDraw() {
         if (!initialised)throw runtime_error("Error: tried to call reDraw for uninitialised Enemy ship!");
@@ -59,9 +58,8 @@ public:
             } else {
                 // Draw_Line(screenManager->getMainSurface(), location.x2, location.y2, location.x2+1, location.y1, 0xff);
             }*/
-        } else if (doOnce) {
+        } else {
             cout << "WARNING: Enemy(" << this << ") Should have been deleted, but got reDraw command" << endl;
-            doOnce = false;
         }
     }
 
