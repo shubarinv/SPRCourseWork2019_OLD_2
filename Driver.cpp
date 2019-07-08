@@ -155,6 +155,7 @@ int main() {
         for (auto &enemyShip : enemyShips) {
             enemyShip.reDraw();
         }
+		gmManager.checkForNewWave();
         screenManager.updateScreen();
 
 

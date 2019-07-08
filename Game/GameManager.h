@@ -65,6 +65,10 @@ public:
             particle->setIsOnScreem(false);
         }
     }
+    void checkForNewWave(){
+    	if(enemyShips->empty())
+    		setWave(++wave);
+    }
 
 };
 
