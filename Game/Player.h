@@ -33,6 +33,7 @@ public:
 
         weapon.init(screenManager, false);
         weapon.location = this->location;
+	    hitLoc = new int[health / 20]{-1};
         money = 0;
     }
 
