@@ -64,12 +64,15 @@ private:
             location.y2 = particle.y + particle.h;
         }
     }
+public:
+    static bool removalCheck(Particle prtcl) {
+        return !prtcl.isOnScreen();
+    }
 };
 
 
-bool removalCheck(Particle particle) {
-    return !particle.isOnScreen();
-}
+
+
 class Weapon : public GameObject {
 private:
     int ammo{40}, power{1};
@@ -112,10 +115,10 @@ public:
     void update(coords newloc) {
         location = newloc;
         if (!particles.empty()) {
-            particles.remove_if(removalCheck);
             for (auto &particle : particles) {
                 particle.reDraw();
             }
+
         }
     }
 

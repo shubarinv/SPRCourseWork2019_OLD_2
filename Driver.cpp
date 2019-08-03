@@ -69,8 +69,7 @@ int th_checkHitsPlayer(void *unused) {
 	while (!stopThreads) {
 		for (auto &enemyShip : enemyShips) {
 			for (auto &particle : player.weapon.particles) {
-				if (particle.isOnScreen())
-					GameManager::checkForHits(&enemyShip, &particle);
+					gmManager.checkForHits(&enemyShip, &particle);
 			}
 		}
 	}
@@ -82,10 +81,10 @@ int th_checkHitsEnemy(void *unused) {
 	while (!stopThreads) {
 		for (auto &enemyShip : enemyShips) {
 			gmManager.enemyShoot(&player,&enemyShip);
+			enemyShip.weapon.particles.remove_if(Particle::removalCheck);
 			for (auto &particle : enemyShip.weapon.particles) {
-				GameManager::checkForHits(&player, &particle);
+                gmManager.checkForHits(&player, &particle);
 			}
-
 		}
 	}
 	cout << "Thread (checkHitsEnemy) got stop command... Quiting" << endl;
@@ -133,10 +132,10 @@ int main() {
 				SDL_WaitThread(checkHitsEnemy_Thread, nullptr);
 				break;
 			}
-			if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_LEFT)
+			if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_LEFT)
 				player.setMovementDirection(-1);
 
-			if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_RIGHT)
+			if (event.type == SDL_KEYDOWN && event.key.keysym.sym == SDLK_RIGHT)
 				player.setMovementDirection(1);
 
 			if (event.type == SDL_KEYUP && event.key.keysym.sym == SDLK_DOWN)
