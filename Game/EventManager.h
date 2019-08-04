@@ -14,7 +14,7 @@ private:
     int mousePosX{0}, mousePosY{0};
 public:
     SDL_Event getEvent() {
-        event.type = NULL;
+        event.type = '\0';
         SDL_PollEvent(&event);
         SDL_GetMouseState(&mousePosX, &mousePosY);
 
@@ -24,11 +24,11 @@ public:
         return event;
     }
 
-    int getMousePosX() const {
+    [[nodiscard]] int getMousePosX() const {
         return mousePosX;
     }
 
-    int getMousePosY() const {
+    [[nodiscard]] int getMousePosY() const {
         return mousePosY;
     }
 };

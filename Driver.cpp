@@ -65,9 +65,16 @@ int showMainMenu(EventManager *eventMgr, ScreenManager *screenMgr, UI_Manager *U
 	return 0;
 }
 
+static bool removalCheck(Enemy enmy) {
+    return enmy.getHealth() < 0;
+}
+
+
 int th_checkHitsPlayer(void *unused) {
 	while (!stopThreads) {
+        enemyShips.remove_if(removalCheck);
 		for (auto &enemyShip : enemyShips) {
+            player.weapon.particles.remove_if(Particle::removalCheck);
 			for (auto &particle : player.weapon.particles) {
 					gmManager.checkForHits(&enemyShip, &particle);
 			}

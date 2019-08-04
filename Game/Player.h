@@ -10,7 +10,6 @@
 class Player : public Ship {
 private:
     int money{0};
-    SDL_Rect body{};
     int bodyColor = 0x727272;
 
 public:
@@ -27,7 +26,6 @@ public:
             SDL_FillRect(screenMgr->getMainSurface(), &body, bodyColor);
         }
         location.x1 = body.x;
-        location.x2 = location.x1 + body.w;
         location.y1 = body.y;
         location.y2 = location.y1 + body.h;
 
@@ -60,6 +58,8 @@ public:
     void shoot() {
         weapon.shoot();
     }
+
+    SDL_Rect body{};
 };
 
 

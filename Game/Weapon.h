@@ -13,8 +13,8 @@
 class Particle : public GameObject {
 private:
     bool bIsOnScreen{true};
-    ScreenManager *screenManager;
-    SDL_Rect particle;
+    ScreenManager *screenManager{};
+    SDL_Rect particle{};
     bool bIsEnemy{true};
 public:
     Particle() {
@@ -35,7 +35,7 @@ public:
         initialsed = true;
     }
 
-    bool isOnScreen() const {
+    [[nodiscard]] bool isOnScreen() const {
         return bIsOnScreen;
     }
 
@@ -44,17 +44,17 @@ public:
     }
 
     void reDraw() {
-        if (!initialsed) throw runtime_error("Error: Particle is UNINITIALISED, but got reDraw command");
+        if (!initialsed) cout<<"WARNING: Particle is UNINITIALISED, but got reDraw command"<<endl;
         if (initialsed && bIsOnScreen) {
-            updatelocation();
+            updateLocation();
             SDL_FillRect(screenManager->getMainSurface(), &particle, 0xff0000);
         } else {
-            throw runtime_error("Error: Particle Should have been deleted, but got reDraw command");
+            cout<<"WARNING: Particle Should have been deleted, but got reDraw command"<<endl;
         }
     }
 
 private:
-    void updatelocation() {
+    void updateLocation() {
         if (bIsOnScreen) {
             if (particle.y >= screenManager->getScreenHeight() || particle.y <= 0)
                 bIsOnScreen = false;
@@ -64,13 +64,12 @@ private:
             location.y2 = particle.y + particle.h;
         }
     }
+
 public:
     static bool removalCheck(Particle prtcl) {
         return !prtcl.isOnScreen();
     }
 };
-
-
 
 
 class Weapon : public GameObject {
@@ -90,11 +89,11 @@ public:
         initialsed = false;
     }
 
-    int getPower() const {
+    [[maybe_unused]] int getPower() const {
         return power;
     }
 
-    void setPower(int pwr) {
+    [[maybe_unused]] void setPower(int pwr) {
         Weapon::power = pwr;
     }
 
@@ -104,11 +103,11 @@ public:
         particles.back().init(screenManager, location, bIsEnemy);
     }
 
-    int getAmmo() const {
+    [[maybe_unused]] int getAmmo() const {
         return ammo;
     }
 
-    void setAmmo(int ammoAmount) {
+    [[maybe_unused]] void setAmmo(int ammoAmount) {
         Weapon::ammo = ammoAmount;
     }
 

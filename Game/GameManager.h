@@ -50,16 +50,17 @@ public:
     }
 
     void checkForHits(Player *ship, Particle *particle) { ///< @bug Doesn't work somewhy
-      /*  cout << "----------" << endl;
-        cout << "X1 " << ((particle->location.x1 + particle->location.x2) / 2 >= ship->getCoords().x1) << endl;
-        cout << "X2 " << ((particle->location.x1 + particle->location.x2) / 2 <= ship->getCoords().x2) << endl;
-        cout << "Y1 " << (particle->location.y1 >= ship->getCoords().y1) << endl;
-        cout << "Y2 " << (particle->location.y2 <= ship->location.y2) << endl;*/
-        if ((particle->location.x1 + particle->location.x2) / 2 >= ship->getCoords().x1 &&
-            (particle->location.x1 + particle->location.x2) / 2 <= ship->getCoords().x2 &&
-            particle->location.y1 >= ship->getCoords().y1 &&
-            particle->location.y2 <= ship->getCoords().y2) {
-            // ship->gotHit((particle->location.x1 + particle->location.x2) / 2);
+        //  cout << "----------" << endl;
+        ship->location.x2 = ship->location.x1 + ship->body.w;
+        ship->location.y2 = ship->location.y1 + ship->body.h;
+        if (ship->location.x1 == ship->location.x2 || ship->location.y1 == ship->location.y2)
+            throw runtime_error(
+                    "GM->Check_for_hitsTHREAD-> Player coords check FAILED: player coordinates are equal to each other");
+        if ((particle->location.x1 + particle->location.x2) / 2 >= ship->location.x1 - 5 &&
+            (particle->location.x1 + particle->location.x2) / 2 <= ship->location.x2 + 5 &&
+            particle->location.y1 >= ship->location.y1 - 1 &&
+            particle->location.y2 <= ship->location.y2 + 5) {
+
             ship->setHealth(-25);
             cout << "Player (" << ship << ") got hit" << endl;
             cout << "Particle (" << particle << ") Will now be removed" << endl;
@@ -69,10 +70,15 @@ public:
 
     void checkForHits(Enemy *ship, Particle *particle) {
         if (particle) {
-            if ((particle->location.x1 + particle->location.x2) / 2 >= ship->getCoords().x1 &&
-                (particle->location.x1 + particle->location.x2) / 2 <= ship->getCoords().x2 &&
-                particle->location.y1 >= ship->getCoords().y1 &&
-                particle->location.y2 <= ship->getCoords().y2) {
+            ship->location.x2 = ship->location.x1 + ship->body.w;
+            ship->location.y2 = ship->location.y1 + ship->body.h;
+            if (ship->location.x1 == ship->location.x2 || ship->location.y1 == ship->location.y2)
+                throw runtime_error(
+                        "GM->Check_for_hitsTHREAD-> Enemy coords check FAILED: player coordinates are equal to each other");
+            if ((particle->location.x1 + particle->location.x2) / 2 >= ship->location.x1 &&
+                (particle->location.x1 + particle->location.x2) / 2 <= ship->location.x2 &&
+                particle->location.y1 >= ship->location.y1 &&
+                particle->location.y2 <= ship->location.y2) {
                 //  ship->gotHit((particle->location.x1 + particle->location.x2) / 2);
                 ship->setHealth(-25);
                 cout << "Enemy (" << ship << ") got hit" << endl;

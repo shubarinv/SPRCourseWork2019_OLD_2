@@ -19,7 +19,6 @@ protected:
     int health{0}, movementDirection{0}, movementSpeed{0};
 
     ScreenManager *screenManager = nullptr;
-    SDL_Rect body;
     int bodyColor = 0x727272;
 	int *hitLoc;
 
@@ -32,8 +31,6 @@ protected:
 
         if ((location.x1 < 0) && movementDirection == -1)
             location.x1 += screenManager->getScreenWidth() - 90;
-
-        location.x2 = location.x1 + body.w;
     }
 
 public:
@@ -64,6 +61,7 @@ public:
 
     Weapon weapon;
     coords location;
+    SDL_Rect body;
 };
 
 
