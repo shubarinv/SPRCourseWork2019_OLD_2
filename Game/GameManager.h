@@ -28,7 +28,7 @@ private:
     int wave{0};
     ScreenManager *screenManager;
     list<Enemy> *enemyShips;
-    int elapsed = 0, current = 0, timeSinceSecond = 0, frames = 0, next, avgFPS = 100; //avgFPS - Avg fps per seconds
+    int elapsed = 0, current = 0, timeSinceSecond = 0, frames = 0, next{}, avgFPS = 100; //avgFPS - Avg fps per seconds
     int framerate = 59;
 public:
 
@@ -49,10 +49,11 @@ public:
 
     }
 
-    void checkForHits(Player *ship, Particle *particle) { ///< @bug Doesn't work somewhy
+    static void checkForHits(Player *ship, Particle *particle) { ///< @bug Doesn't work somewhy
+        particle->canBeRemoved = false;
         //  cout << "----------" << endl;
-        ship->location.x2 = ship->location.x1 + ship->body.w;
-        ship->location.y2 = ship->location.y1 + ship->body.h;
+        /*   ship->location.x2 = ship->location.x1 + ship->body.w;
+           ship->location.y2 = ship->location.y1 + ship->body.h;*/
         if (ship->location.x1 == ship->location.x2 || ship->location.y1 == ship->location.y2)
             throw runtime_error(
                     "GM->Check_for_hitsTHREAD-> Player coords check FAILED: player coordinates are equal to each other");
@@ -66,15 +67,16 @@ public:
             cout << "Particle (" << particle << ") Will now be removed" << endl;
             particle->setIsOnScreem(false);
         }
+        particle->canBeRemoved=true;
     }
 
     void checkForHits(Enemy *ship, Particle *particle) {
-        if (particle) {
-            ship->location.x2 = ship->location.x1 + ship->body.w;
-            ship->location.y2 = ship->location.y1 + ship->body.h;
+        particle->canBeRemoved = false;
+        if (!particle->shouldBeRemoved) {
+            /*  ship->location.x2 = ship->location.x1 + ship->body.w;
+              ship->location.y2 = ship->location.y1 + ship->body.h;*/
             if (ship->location.x1 == ship->location.x2 || ship->location.y1 == ship->location.y2)
-                throw runtime_error(
-                        "GM->Check_for_hitsTHREAD-> Enemy coords check FAILED: player coordinates are equal to each other");
+                        cout<<"ERROR: GM->Check_for_hitsTHREAD-> Enemy coords check FAILED: player coordinates are equal to each other"<<endl;
             if ((particle->location.x1 + particle->location.x2) / 2 >= ship->location.x1 &&
                 (particle->location.x1 + particle->location.x2) / 2 <= ship->location.x2 &&
                 particle->location.y1 >= ship->location.y1 &&
@@ -86,6 +88,7 @@ public:
                 particle->setIsOnScreem(false);
             }
         }
+        particle->canBeRemoved = true;
     }
 
     void checkForNewWave() {

@@ -44,30 +44,36 @@ public:
     }
 
     void reDraw() {
-        if (!initialsed) cout<<"WARNING: Particle is UNINITIALISED, but got reDraw command"<<endl;
+        if (!initialsed) cout << "WARNING: Particle is UNINITIALISED, but got reDraw command" << endl;
         if (initialsed && bIsOnScreen) {
             updateLocation();
             SDL_FillRect(screenManager->getMainSurface(), &particle, 0xff0000);
         } else {
-            cout<<"WARNING: Particle Should have been deleted, but got reDraw command"<<endl;
+            cout << "WARNING: Particle Should have been deleted, but got reDraw command" << endl;
         }
     }
 
 private:
     void updateLocation() {
-        if (bIsOnScreen) {
-            if (particle.y >= screenManager->getScreenHeight() || particle.y <= 0)
-                bIsOnScreen = false;
-            if (bIsEnemy) particle.y++;
-            else particle.y--;
-            location.y1 = particle.y;
-            location.y2 = particle.y + particle.h;
+        canBeRemoved = false;
+        if (!shouldBeRemoved) {
+            if (bIsOnScreen) {
+                if (particle.y >= screenManager->getScreenHeight() || particle.y <= 0)
+                    bIsOnScreen = false;
+                if (bIsEnemy) particle.y++;
+                else particle.y--;
+                location.y1 = particle.y;
+                location.y2 = particle.y + particle.h;
+            }
         }
+        canBeRemoved = true;
     }
 
 public:
     static bool removalCheck(Particle prtcl) {
-        return !prtcl.isOnScreen();
+        if (!prtcl.isOnScreen())
+            prtcl.shouldBeRemoved = true;
+        return prtcl.canBeRemoved && prtcl.shouldBeRemoved;
     }
 };
 
@@ -115,7 +121,9 @@ public:
         location = newloc;
         if (!particles.empty()) {
             for (auto &particle : particles) {
+                particle.canBeRemoved=false;
                 particle.reDraw();
+                particle.canBeRemoved=true;
             }
 
         }

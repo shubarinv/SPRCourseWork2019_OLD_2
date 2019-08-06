@@ -18,14 +18,13 @@ public:
         health = 100;
         movementDirection = 1;
         movementSpeed = 1;
-        {
-            body.w = 90;
-            body.h = 35;
-            body.x = 100;
-            body.y = screenMgr->getScreenHeight() - 50;
-            SDL_FillRect(screenMgr->getMainSurface(), &body, bodyColor);
-        }
+        body.w = 90;
+        body.h = 35;
+        body.x = 100;
+        body.y = screenMgr->getScreenHeight() - 50;
+        SDL_FillRect(screenMgr->getMainSurface(), &body, bodyColor);
         location.x1 = body.x;
+        location.x2 = body.x + body.w;
         location.y1 = body.y;
         location.y2 = location.y1 + body.h;
 
@@ -39,6 +38,7 @@ public:
         if (health > 0) {
             updateLocation();
             body.x = location.x1;
+            location.x2=location.x1+body.w;
             SDL_FillRect(screenManager->getMainSurface(), &body, bodyColor);
             weapon.update(location);
         }

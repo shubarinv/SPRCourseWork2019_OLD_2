@@ -23,13 +23,12 @@ public:
 		screenManager = screenMgr;
 		movementDirection = 1;
 		movementSpeed = 1;
-		{
 			body.w = 80;
 			body.h = 30;
 			body.x = randIntInRange(100, screenManager->getScreenWidth());
 			body.y = 70;
 			SDL_FillRect(screenMgr->getMainSurface(), &body, bodyColor);
-		}
+
 		location.x1 = body.x;
 		location.x2 = body.x + body.w;
 		location.y1 = body.y;
@@ -49,6 +48,7 @@ public:
 		if (health > 0) {
 			updateLocation();
 			body.x = location.x1;
+            location.x2=location.x1+body.w;
 			SDL_FillRect(screenManager->getMainSurface(), &body, bodyColor);
 			weapon.update(location);
 

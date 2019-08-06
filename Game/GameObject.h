@@ -16,6 +16,8 @@ public:
         int y1, y2;
     };
     coords location;
+    bool canBeRemoved=true;
+    bool shouldBeRemoved=false;
 
     int randIntInRange(int min, int max) {
         std::random_device rd;     // only used once to initialise (seed) engine
